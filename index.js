@@ -51,10 +51,28 @@ const updateUsernames = () => {
     io.sockets.emit('get users', users)
 }
 
-const newMessageEvent = "new_message"
-// listen to message
-socket.on(newMessageEvent, data => {
+// listen to new_message
+socket.on("new_message", data => {
     // get new message info
     // emit listener -> take message and take info passed on socket, username color
-    io.sockets.emit(newMessageEvent, {message: data.message, username: socket.username, color: socket.color })
+    io.sockets.emit("new_message", {message: data.message, username: socket.username, color: socket.color })
+})
+
+socket.io("disconnect", data => {
+    if(!socket.username)
+    return
+
+    let user = undefined
+    let x = 0;
+    for(x in users.length) {
+        if(users[i].id === socket.id) {
+            user = user[i];
+            break;
+        }
+    }
+    users.splice(user, 1);
+
+    updateUsernames();
+    connections.splice(connections.indexOf(socket),1)
+
 })
